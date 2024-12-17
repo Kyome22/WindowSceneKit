@@ -67,10 +67,10 @@ You can toggle the visibility of the specified WindowScene from a remote scope.
 
 ```swift
 // Request to open the specified WindowScene.
-WindowSceneMessenger.request(windowAction: .open, windowKey: "SomePanelKey")
+WindowSceneMessenger.request(windowAction: .open, windowKey: "SomeWindowKey")
 
 // Request to close the specified WindowScene.
-WindowSceneMessenger.request(windowAction: .close, windowKey: "SomePanelKey")
+WindowSceneMessenger.request(windowAction: .close, windowKey: "SomeWindowKey")
 ```
 
 ## Privacy Manifest
