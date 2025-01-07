@@ -16,7 +16,7 @@ import SwiftUI
         self.closeAction = closeAction
     }
 
-    func open(window instance: @escaping () -> NSWindow) {
+    func open(window instance: @autoclosure @escaping () -> NSWindow) {
         guard window == nil else { return }
         window = instance()
         window?.isReleasedWhenClosed = false

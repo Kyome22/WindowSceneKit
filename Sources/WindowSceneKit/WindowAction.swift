@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-public enum WindowAction {
+public enum WindowAction: Sendable {
     case open
     case close
 

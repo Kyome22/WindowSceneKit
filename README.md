@@ -15,12 +15,12 @@ Below is an example of displaying a custom `NSWindow`.
 ```swift
 @main
 struct SampleApp: App {
-    @WindowState("SomeWindowKey") var isPresented: Bool = true
+    @WindowState("SomeWindowKey") var isPresented = true
 
     var body: some Scene {
-        WindowScene(isPresented: $isPresented, window: CustomWindow(content: {
-            ContentView()
-        }))
+        WindowScene(isPresented: $isPresented, window: { _ in
+            CustomWindow(content: { ContentView() })
+        })
     }
 }
 ```
@@ -30,35 +30,13 @@ final class CustomWindow: NSWindow {
     init<Content: View>(@ViewBuilder content: () -> Content) {
         super.init(
             contentRect: .zero,
-            styleMask: [.closable, .miniaturizable, .resizable],
+            styleMask: [.titled, .closable, .miniaturizable, .resizable],
             backing: .buffered,
             defer: false
         )
-        level = .popUpMenu
+        level = .floating
         collectionBehavior = [.canJoinAllSpaces]
-        alphaValue = .zero
         contentView = NSHostingView(rootView: content())
-    }
-
-    override func orderFrontRegardless() {
-        super.orderFrontRegardless()
-        NSAnimationContext.runAnimationGroup { context in
-            context.duration = 0.2
-            context.allowsImplicitAnimation = true
-            animator().alphaValue = 1.0
-        } completionHandler: {
-            self.makeKey()
-        }
-    }
-
-    override func close() {
-        NSAnimationContext.runAnimationGroup { context in
-            context.duration = 0.2
-            context.allowsImplicitAnimation = true
-            animator().alphaValue = .zero
-        } completionHandler: {
-            super.close()
-        }
     }
 }
 ```
@@ -71,6 +49,27 @@ WindowSceneMessenger.request(windowAction: .open, windowKey: "SomeWindowKey")
 
 // Request to close the specified WindowScene.
 WindowSceneMessenger.request(windowAction: .close, windowKey: "SomeWindowKey")
+```
+
+Additionally, you can submit supplementary information.
+
+```swift
+WindowSceneMessenger.request(
+    windowAction: .open, 
+    windowKey: "SomeWindowKey",
+    supplements: ["name", "Sakura"]
+)
+
+@main
+struct SampleApp: App {
+    @WindowState("SomeWindowKey") var isPresented = true
+
+    var body: some Scene {
+        WindowScene(isPresented: $isPresented, window: { supplements in
+            CustomWindow(content: { ContentView(name: supplements["name"] as? String) })
+        })
+    }
+}
 ```
 
 ## Privacy Manifest
