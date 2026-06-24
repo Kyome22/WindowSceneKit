@@ -57,7 +57,7 @@ Additionally, you can submit supplementary information.
 WindowSceneMessenger.request(
     windowAction: .open, 
     windowKey: "SomeWindowKey",
-    supplements: ["name", "Sakura"]
+    supplements: ["name": "Sakura"]
 )
 
 @main
