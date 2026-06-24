@@ -24,6 +24,7 @@ struct ExampleApp: App {
             .padding()
         }
         .windowResizability(.contentSize)
+
         WindowScene(isPresented: $isPresented, window: { supplements in
             CustomWindow {
                 ContentView(name: supplements["name"] as? String)

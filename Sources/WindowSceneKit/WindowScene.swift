@@ -7,11 +7,10 @@
 */
 
 import SwiftUI
-import Observation
 
 public struct WindowScene: Scene {
-    @Binding var isPresented: Bool
-    var window: ([String: any Sendable]) -> NSWindow
+    @Binding private var isPresented: Bool
+    private var window: ([String: any Sendable]) -> NSWindow
 
     public init(isPresented: Binding<Bool>, window: @escaping (_ supplements: [String: any Sendable]) -> NSWindow) {
         _isPresented = isPresented

@@ -6,8 +6,6 @@
  
 */
 
-import SwiftUI
-
 public enum WindowAction: Sendable {
     case open
     case close

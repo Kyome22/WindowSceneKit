@@ -6,9 +6,7 @@
  
 */
 
-import SwiftUI
-
-extension Notification: @retroactive @unchecked Sendable {}
+import Foundation
 
 extension Notification.Name {
     static let didRequestWindowAction = Notification.Name("didRequestWindowAction")
