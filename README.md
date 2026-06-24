@@ -4,8 +4,8 @@ Providing NSWindow via SwiftUI Scene.
 
 ## Requirements
 
-- Development with Xcode 16.0+
-- Written in Swift 6.0
+- Development with Xcode 26.2+
+- Written in Swift 6.2
 - Compatible with macOS 14.0+
 
 ## Usage
