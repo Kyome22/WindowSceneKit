@@ -20,7 +20,8 @@ import Observation
         self.isPresented = isPresented
         // The WindowStateStore and App lifecycles are the same.
         Task {
-            for await notification in NotificationCenter.default.publisher(for: .didRequestWindowAction).values {
+            let publisher = NotificationCenter.default.publisher(for: .didRequestWindowAction)
+            for await notification in publisher.bufferedValues() {
                 guard let userInfo = notification.userInfo,
                       let windowKey = userInfo["windowKey"] as? String,
                       let windowAction = userInfo["windowAction"] as? WindowAction,
