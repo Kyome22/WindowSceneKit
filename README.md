@@ -10,17 +10,27 @@ Providing NSWindow via SwiftUI Scene.
 
 ## Usage
 
+First, define a `WindowSceneKey`.
+The key carries the type of its payload, and its id string must be unique across all windows.
+If a window does not need a payload, use `Void` as the payload type.
+
+```swift
+extension WindowSceneKey where Payload == Void {
+    static var custom: Self { .init("CustomWindow") }
+}
+```
+
 Below is an example of displaying a custom `NSWindow`.
 
 ```swift
 @main
 struct SampleApp: App {
-    @WindowState("SomeWindowKey") var isPresented = true
+    @WindowState(.custom) var isPresented = true
 
     var body: some Scene {
-        WindowScene(isPresented: $isPresented, window: { _ in
+        WindowScene(isPresented: $isPresented, key: .custom) { _ in
             CustomWindow(content: { ContentView() })
-        })
+        }
     }
 }
 ```
@@ -45,29 +55,35 @@ You can toggle the visibility of the specified WindowScene from a remote scope.
 
 ```swift
 // Request to open the specified WindowScene.
-WindowSceneMessenger.request(windowAction: .open, windowKey: "SomeWindowKey")
+WindowSceneMessenger.request(.open, for: .custom)
 
 // Request to close the specified WindowScene.
-WindowSceneMessenger.request(windowAction: .close, windowKey: "SomeWindowKey")
+WindowSceneMessenger.request(.close, for: .custom)
 ```
 
-Additionally, you can submit supplementary information.
+Additionally, you can submit a payload.
+Define a key whose `Payload` is your own `Sendable` type.
+Because the key carries the payload type, the payload is delivered to the `window` closure fully typed — no casting required.
 
 ```swift
-WindowSceneMessenger.request(
-    windowAction: .open, 
-    windowKey: "SomeWindowKey",
-    supplements: ["name": "Sakura"]
-)
+struct CustomPayload: Sendable {
+    let name: String
+}
+
+extension WindowSceneKey where Payload == CustomPayload {
+    static var custom: Self { .init("CustomWindow") }
+}
+
+WindowSceneMessenger.request(.open, for: .custom, payload: CustomPayload(name: "Sakura"))
 
 @main
 struct SampleApp: App {
-    @WindowState("SomeWindowKey") var isPresented = true
+    @WindowState(.custom) var isPresented = true
 
     var body: some Scene {
-        WindowScene(isPresented: $isPresented, window: { supplements in
-            CustomWindow(content: { ContentView(name: supplements["name"] as? String) })
-        })
+        WindowScene(isPresented: $isPresented, key: .custom) { payload in
+            CustomWindow(content: { ContentView(name: payload?.name) })
+        }
     }
 }
 ```

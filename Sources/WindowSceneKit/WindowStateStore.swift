@@ -10,7 +10,7 @@ import SwiftUI
 import Observation
 
 @MainActor @Observable final class WindowStateStore {
-    static var supplements = [String: any Sendable]()
+    static var payloads = [String: Any]()
 
     var windowKey: String
     var isPresented: Bool
@@ -25,12 +25,11 @@ import Observation
                 guard let userInfo = notification.userInfo,
                       let windowKey = userInfo["windowKey"] as? String,
                       let windowAction = userInfo["windowAction"] as? WindowAction,
-                      let supplements = userInfo["supplements"] as? Supplements,
                       windowKey == self.windowKey else {
                     continue
                 }
                 if windowAction.isOpen {
-                    Self.supplements = supplements.value
+                    Self.payloads[windowKey] = userInfo["payload"]
                 }
                 self.isPresented = windowAction.isOpen
             }
