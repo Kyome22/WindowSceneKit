@@ -9,16 +9,18 @@
 import SwiftUI
 
 public struct WindowSceneMessenger {
-    public static func request(
-        windowAction: WindowAction,
-        windowKey: String,
-        supplements: [String: any Sendable] = [:]
+    public static func request<Payload: Sendable>(
+        _ windowAction: WindowAction,
+        for key: WindowSceneKey<Payload>,
+        payload: Payload? = nil
     ) {
-        let userInfo: [AnyHashable: Any] = [
-            "windowKey": windowKey,
+        var userInfo: [AnyHashable: Any] = [
+            "windowKey": key.id,
             "windowAction": windowAction,
-            "supplements": Supplements(value: supplements),
         ]
+        if let payload {
+            userInfo["payload"] = payload as any Sendable
+        }
         NotificationCenter.default.post(name: .didRequestWindowAction, object: nil, userInfo: userInfo)
     }
 }

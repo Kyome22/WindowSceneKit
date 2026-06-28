@@ -23,7 +23,7 @@ import SwiftUI
         )
     }
 
-    public init(wrappedValue: Bool, _ windowKey: String) {
-        store = .init(windowKey: windowKey, isPresented: wrappedValue)
+    public init<Payload: Sendable>(wrappedValue: Bool, _ key: WindowSceneKey<Payload>) {
+        store = .init(windowKey: key.id, isPresented: wrappedValue)
     }
 }
